@@ -17,9 +17,11 @@ class MyApp extends StatelessWidget {
         ),
         home: Scaffold(
           appBar: AppBar(
+            leading: Container(),
             title: const Text('Tasks'),
           ),
-          body: ListView(          //listView faz o papel de scrollar
+          body: ListView(
+            //listView faz o papel de scrollar
             // scrollDirection: Axis.horizontal,
             children: [
               Task('praticar flutterflutterflutterflutter'),
@@ -37,9 +39,18 @@ class MyApp extends StatelessWidget {
         ));
   }
 }
-class Task extends StatelessWidget {
+
+class Task extends StatefulWidget {
   final String nome;
-  const Task(this.nome,{super.key});
+
+  const Task(this.nome, {super.key});
+
+  @override
+  State<Task> createState() => _TaskState();
+}
+
+class _TaskState extends State<Task> {
+  int nivel = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -65,13 +76,52 @@ class Task extends StatelessWidget {
                         width: 72,
                         height: 100,
                       ),
-                      Container(width:200, child: Text(nome,style: TextStyle(fontSize: 24,overflow: TextOverflow.ellipsis),)),
-                      ElevatedButton(
-                          onPressed: () {}, child: Icon(Icons.arrow_drop_up))
+                      Container(
+                          width: 200,
+                          child: Text(
+                            widget.nome,
+                            style: TextStyle(
+                                fontSize: 24, overflow: TextOverflow.ellipsis),
+                          )),
+                      Container(
+                        child: ElevatedButton(
+                            onPressed: () {
+                              setState(() {
+                                nivel++;
+                              });
+                              print(nivel);
+                            },
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Icon(Icons.arrow_drop_up),
+                                Text('UP', style: TextStyle(fontSize: 12),)
+                              ],
+                            )),
+                      )
                     ],
                   ),
                 ),
-                Text('nivel 0',style: TextStyle(color: Colors.white,fontSize: 16),)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        child: LinearProgressIndicator(color: Colors.white,value: nivel/10,),
+                        width: 200,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        'nivel: $nivel',
+                        style: TextStyle(color: Colors.white, fontSize: 16),
+                      ),
+                    ),
+                  ],
+                ),
               ],
             )
           ],
